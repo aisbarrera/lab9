@@ -1,0 +1,76 @@
+#Programa por Otto Wantland Andrea Barrera y Diego Rodriguez
+# ejemplo. Encontrar ruta mas corta
+# con algoritmo de Floyd
+
+import networkx as nx
+file = open('electoral.txt', "r+")
+g = nx.DiGraph()
+deseo = True
+
+#Pide las ciudades al usuario
+print "Bienvenido a Calculo Electoral"
+while deseo == True:
+    texto =  file.read()
+    partes = texto.split()
+    tamanio = len (partes)
+    contadorTamanio = 0
+    espacio = 0
+    contadorEspacio = 0
+    datos = []
+    while contadorTamanio != (tamanio):
+        ciudad1 = partes[espacio]
+        espacio += 1
+        ciudad2 = partes[espacio]
+        espacio += 1
+        largo = int(partes[espacio])
+        espacio += 1
+        g.add_edge(ciudad1, ciudad2, weight=largo)
+        contadorTamanio += 3
+        
+    city1 = raw_input("De que ciudad va a partir?\n")
+    city2 = raw_input("A que ciudad desea viajar?\n")
+
+    city1 += ','
+    city2 +=','
+
+    print "Ruta mas corta"
+    k = nx.dijkstra_path(g,city1,city2)
+    print k
+    print "Peso de la ruta"
+    j = nx.dijkstra_path_length(g,city1,city2)
+    print j
+
+    decision1 = raw_input("Existe alguna nueva conexion entre ciudades?(y/n)\n")
+    if (decision1 == "y"):
+        cambio1 = raw_input("Nombre de Ciudad 1\n")
+        cambio2 = raw_input("Nombre de ciudad 2\n")
+        cambio3 = raw_input("Distancia entre las dos\n")
+        cambio1 = '\n' + cambio1
+        cambio1 += ', '
+        cambio2 += ', '
+        file.write(cambio1 + cambio2 + cambio3)
+        cambio3 = int(cambio3)
+        g.add_edge(cambio1, cambio2, cambio3)
+        print "Cambio Realizado\nSe vera reflejado al reiniciar el programa"
+        
+    if (decision1 == "n"):
+        print "No se agrega nada"
+    decision2 = raw_input("Desea indicar que ha sucedido un problema en una carretera?(y/n)\n")
+    if (decision2 == "y"):
+        cambio1 = raw_input("Nombre de la ciudad 1\n")
+        cambio2 = raw_input("Nombre de la ciudad 2\n")
+        cambio1 += ','
+        cambio2 += ','
+        print cambio2
+        g.remove_edge(cambio1,cambio2)
+        print "Problema incorporado al programa"
+        print "Correr nuevamente para tomar en cuenta los cambios"
+    
+    decision3 = raw_input("Desea correr nuevamente? (y/n)\n")
+    if (decision3 == "y"):
+        deseo = True
+    else:
+        deseo = False
+        
+
+
